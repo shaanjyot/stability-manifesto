@@ -1,0 +1,2 @@
+# stability-manifesto
+stability-manifesto
