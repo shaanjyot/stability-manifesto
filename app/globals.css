@@ -50,8 +50,9 @@ a {
   .two-col {
     flex-direction: column !important;
   }
-  .pillars-grid {
-    grid-template-columns: 1fr 1fr !important;
+  .beat-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px 0 !important;
   }
   .gudiya-grid {
     grid-template-columns: 1fr 1fr !important;

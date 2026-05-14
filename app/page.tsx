@@ -12,7 +12,8 @@ const NAV_SECTIONS = [
   { id: 'pdf', label: 'Read PDF' },
 ]
 
-const PILLARS = [
+/** Five narrative beats — editorial through-line (replaces cramped “pillar” cards) */
+const MANIFESTO_BEATS = [
   {
     icon: '⚡',
     title: 'The Problem',
@@ -36,7 +37,7 @@ const PILLARS = [
   },
   {
     icon: '🌐',
-    title: 'The Solution',
+    title: 'The Discipline',
     sub: 'Stability Engineering',
     desc: 'Stability Engineering provides the architecture, mechanisms, and control for safe, scalable, resilient systems — operating at machine speed across the entire system field.',
     color: '#7eb8d4',
@@ -107,10 +108,25 @@ export default function StabilityManifesto() {
   const [scrollY, setScrollY] = useState(0)
   const [navOpen, setNavOpen] = useState(false)
   const [pdfPage, setPdfPage] = useState(1)
+  const [pageJumpDraft, setPageJumpDraft] = useState('1')
   const [visible, setVisible] = useState<Record<string, boolean>>({})
   const [counters, setCounters] = useState({ ms: 0, agents: 0, cascade: 0 })
   const observerRef = useRef<IntersectionObserver | null>(null)
   const totalPages = 28
+
+  const pdfSrc = `/The_Stability_Manifesto-1.pdf#page=${pdfPage}`
+
+  const goPdfPage = (p: number) => {
+    const next = Math.max(1, Math.min(totalPages, Math.round(p)))
+    setPdfPage(next)
+    setPageJumpDraft(String(next))
+  }
+
+  const commitPageJump = () => {
+    const n = parseInt(pageJumpDraft, 10)
+    if (Number.isFinite(n)) goPdfPage(n)
+    else setPageJumpDraft(String(pdfPage))
+  }
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY)
@@ -134,6 +150,10 @@ export default function StabilityManifesto() {
     targets.forEach((t) => observerRef.current!.observe(t))
     return () => observerRef.current?.disconnect()
   }, [])
+
+  useEffect(() => {
+    setPageJumpDraft(String(pdfPage))
+  }, [pdfPage])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -283,27 +303,48 @@ export default function StabilityManifesto() {
         </div>
       </section>
 
-      {/* ── PILLARS ── */}
-      <section style={{ padding: '100px 24px', background: 'linear-gradient(180deg, #060608 0%, #0c0d18 50%, #060608 100%)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{ fontSize: 11, letterSpacing: 4, color: '#c0a060', textTransform: 'uppercase', marginBottom: 12, fontWeight: 700 }}>FIVE PILLARS</div>
-          <h2 style={{ fontFamily: "'Cinzel', serif", fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#e8e8f8', marginBottom: 56 }}>
-            The <span style={{ color: '#c0a060' }}>Core Framework</span>
+      {/* ── THROUGH-LINE (narrative beats) ── */}
+      <section className="through-line-section" style={{ padding: '100px 24px', background: 'linear-gradient(180deg, #060608 0%, #0c0d18 50%, #060608 100%)' }}>
+        <div style={{ maxWidth: 920, margin: '0 auto' }}>
+          <div style={{ fontSize: 11, letterSpacing: 4, color: '#c0a060', textTransform: 'uppercase', marginBottom: 12, fontWeight: 700 }}>THE THROUGH-LINE</div>
+          <h2 style={{ fontFamily: "'Cinzel', serif", fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#e8e8f8', marginBottom: 16 }}>
+            How the <span style={{ color: '#c0a060' }}>argument unfolds</span>
           </h2>
-          <div className="pillars-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 16 }}>
-            {PILLARS.map((p, i) => (
-              <div key={i} data-animate={`pillar-${i}`} style={{
-                background: 'rgba(255,255,255,0.02)', border: `1px solid ${v(`pillar-${i}`) ? p.color : 'transparent'}`,
-                borderRadius: 12, padding: '28px 20px', transition: 'all 0.7s cubic-bezier(0.16,1,0.3,1)',
-                transitionDelay: `${i * 0.1}s`,
-                transform: v(`pillar-${i}`) ? 'translateY(0)' : 'translateY(40px)',
-                opacity: v(`pillar-${i}`) ? 1 : 0,
-              }}>
-                <div style={{ width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 16, background: `${p.color}22`, border: `1px solid ${p.color}55` }}>{p.icon}</div>
-                <div style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: 11, letterSpacing: 2, marginBottom: 8, color: p.color }}>0{i + 1}</div>
-                <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: 15, fontWeight: 700, color: '#e8e8f8', marginBottom: 4 }}>{p.title}</h3>
-                <div style={{ fontSize: 11, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 12, color: p.color }}>{p.sub}</div>
-                <p style={{ fontSize: 13, color: '#888', lineHeight: 1.6 }}>{p.desc}</p>
+          <p style={{ fontSize: 16, color: '#707088', lineHeight: 1.7, marginBottom: 48, maxWidth: 640 }}>
+            Five sequential beats — from the crisis of scale to the call to build — mapped as one readable arc instead of interchangeable cards.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            {MANIFESTO_BEATS.map((p, i) => (
+              <div
+                key={i}
+                className="beat-row"
+                data-animate={`beat-${i}`}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0,72px) 1fr',
+                  gap: '24px 28px',
+                  padding: '36px 0',
+                  borderTop: i === 0 ? 'none' : '1px solid rgba(255,255,255,0.06)',
+                  transition: 'all 0.7s cubic-bezier(0.16,1,0.3,1)',
+                  transitionDelay: `${i * 0.08}s`,
+                  opacity: v(`beat-${i}`) ? 1 : 0,
+                  transform: v(`beat-${i}`) ? 'translateY(0)' : 'translateY(28px)',
+                }}
+              >
+                <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <span style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: 42, lineHeight: 1, color: `${p.color}44`, fontWeight: 400 }}>{String(i + 1).padStart(2, '0')}</span>
+                  <div style={{ position: 'absolute', left: 12, top: 52, bottom: -36, width: 1, background: `linear-gradient(180deg, ${p.color}66, transparent)` }} aria-hidden />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, background: `${p.color}18`, border: `1px solid ${p.color}44` }}>{p.icon}</div>
+                    <div>
+                      <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: 'clamp(17px,2.2vw,22px)', fontWeight: 700, color: '#e8e8f8', marginBottom: 4 }}>{p.title}</h3>
+                      <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: p.color }}>{p.sub}</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: 15, color: '#9090a8', lineHeight: 1.75, maxWidth: 720 }}>{p.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -618,38 +659,78 @@ export default function StabilityManifesto() {
                 <span style={{ color: '#c0a060', fontWeight: 700, fontSize: 14 }}>⚓ The Stability Manifesto</span>
                 <span style={{ color: '#444', fontSize: 12, marginLeft: 12 }}>Ashish Warudkar · Patent Pending</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <button onClick={() => setPdfPage(p => Math.max(1, p - 1))} disabled={pdfPage === 1} style={{ background: 'rgba(192,160,96,0.15)', border: '1px solid rgba(192,160,96,0.3)', color: '#c0a060', fontFamily: "'Rajdhani', sans-serif", fontSize: 13, fontWeight: 600, padding: '6px 16px', borderRadius: 6, cursor: pdfPage === 1 ? 'not-allowed' : 'pointer', letterSpacing: 1, opacity: pdfPage === 1 ? 0.4 : 1 }}>‹ Prev</button>
-                <span style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: 14 }}>
-                  <span style={{ color: '#c0a060' }}>{pdfPage}</span>
-                  <span style={{ color: '#444' }}> / {totalPages}</span>
-                </span>
-                <button onClick={() => setPdfPage(p => Math.min(totalPages, p + 1))} disabled={pdfPage === totalPages} style={{ background: 'rgba(192,160,96,0.15)', border: '1px solid rgba(192,160,96,0.3)', color: '#c0a060', fontFamily: "'Rajdhani', sans-serif", fontSize: 13, fontWeight: 600, padding: '6px 16px', borderRadius: 6, cursor: pdfPage === totalPages ? 'not-allowed' : 'pointer', letterSpacing: 1, opacity: pdfPage === totalPages ? 0.4 : 1 }}>Next ›</button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                <button type="button" onClick={() => goPdfPage(pdfPage - 1)} disabled={pdfPage === 1} style={{ background: 'rgba(192,160,96,0.15)', border: '1px solid rgba(192,160,96,0.3)', color: '#c0a060', fontFamily: "'Rajdhani', sans-serif", fontSize: 13, fontWeight: 600, padding: '6px 16px', borderRadius: 6, cursor: pdfPage === 1 ? 'not-allowed' : 'pointer', letterSpacing: 1, opacity: pdfPage === 1 ? 0.4 : 1 }}>‹ Prev</button>
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'Share Tech Mono', monospace", fontSize: 14 }}>
+                  <span style={{ color: '#555' }}>Page</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    aria-label="Jump to page"
+                    value={pageJumpDraft}
+                    onChange={(e) => setPageJumpDraft(e.target.value.replace(/\D/g, ''))}
+                    onBlur={commitPageJump}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        commitPageJump()
+                        ;(e.target as HTMLInputElement).blur()
+                      }
+                    }}
+                    style={{
+                      width: 44,
+                      padding: '6px 8px',
+                      borderRadius: 6,
+                      border: '1px solid rgba(192,160,96,0.35)',
+                      background: 'rgba(0,0,0,0.4)',
+                      color: '#c0a060',
+                      fontFamily: "'Share Tech Mono', monospace",
+                      fontSize: 14,
+                      textAlign: 'center',
+                    }}
+                  />
+                  <span style={{ color: '#444' }}>/ {totalPages}</span>
+                </label>
+                <button type="button" onClick={() => goPdfPage(pdfPage + 1)} disabled={pdfPage === totalPages} style={{ background: 'rgba(192,160,96,0.15)', border: '1px solid rgba(192,160,96,0.3)', color: '#c0a060', fontFamily: "'Rajdhani', sans-serif", fontSize: 13, fontWeight: 600, padding: '6px 16px', borderRadius: 6, cursor: pdfPage === totalPages ? 'not-allowed' : 'pointer', letterSpacing: 1, opacity: pdfPage === totalPages ? 0.4 : 1 }}>Next ›</button>
                 <a href="/The_Stability_Manifesto-1.pdf" target="_blank" rel="noopener noreferrer" style={{ background: 'rgba(192,160,96,0.2)', border: '1px solid rgba(192,160,96,0.4)', color: '#c0a060', fontFamily: "'Rajdhani', sans-serif", fontSize: 13, fontWeight: 600, padding: '6px 16px', borderRadius: 6, letterSpacing: 1, textDecoration: 'none' }}>↓ Download</a>
               </div>
             </div>
 
-            {/* PDF Frame */}
+            {/* PDF Frame — key forces remount so #page= updates inside embedded viewers */}
             <div style={{ position: 'relative', height: 800 }}>
               <iframe
-                src={`/The_Stability_Manifesto-1.pdf#page=${pdfPage}`}
+                key={pdfPage}
+                src={pdfSrc}
                 style={{ width: '100%', height: '100%', border: 'none', display: 'block', background: '#111' }}
                 title="The Stability Manifesto PDF"
               />
             </div>
 
-            {/* Page thumbnails */}
-            <div style={{ display: 'flex', gap: 6, padding: '14px 20px', flexWrap: 'wrap', borderTop: '1px solid rgba(255,255,255,0.06)', alignItems: 'center' }}>
-              <span style={{ fontSize: 11, color: '#444', letterSpacing: 2, textTransform: 'uppercase', marginRight: 8 }}>Pages:</span>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                <button key={p} onClick={() => setPdfPage(p)} style={{
-                  width: 34, height: 34, borderRadius: 6,
-                  border: `1px solid ${pdfPage === p ? '#c0a060' : 'rgba(255,255,255,0.08)'}`,
-                  background: pdfPage === p ? '#c0a060' : 'rgba(255,255,255,0.03)',
-                  color: pdfPage === p ? '#000' : '#666',
-                  fontFamily: "'Share Tech Mono', monospace", fontSize: 11, cursor: 'pointer', transition: 'all 0.2s',
-                  fontWeight: pdfPage === p ? 700 : 400,
-                }}>
+            {/* Page index */}
+            <div className="pdf-page-rail" style={{ display: 'flex', gap: 6, padding: '14px 20px', flexWrap: 'nowrap', borderTop: '1px solid rgba(255,255,255,0.06)', alignItems: 'center', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <span style={{ fontSize: 11, color: '#444', letterSpacing: 2, textTransform: 'uppercase', marginRight: 8, flexShrink: 0 }}>Pages:</span>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => goPdfPage(p)}
+                  aria-label={`View page ${p}`}
+                  aria-current={pdfPage === p ? 'page' : undefined}
+                  style={{
+                    width: 34,
+                    height: 34,
+                    flexShrink: 0,
+                    borderRadius: 6,
+                    border: `1px solid ${pdfPage === p ? '#c0a060' : 'rgba(255,255,255,0.08)'}`,
+                    background: pdfPage === p ? '#c0a060' : 'rgba(255,255,255,0.03)',
+                    color: pdfPage === p ? '#000' : '#666',
+                    fontFamily: "'Share Tech Mono', monospace",
+                    fontSize: 11,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    fontWeight: pdfPage === p ? 700 : 400,
+                  }}
+                >
                   {p}
                 </button>
               ))}
