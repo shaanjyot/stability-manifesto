@@ -1,0 +1,11 @@
+{
+  "blogs": [
+    {
+      "id": "e4451437-6226-44a9-90bc-65812b20155a",
+      "slug": "the-next-generation-blog",
+      "title": "The Next Generation Blog",
+      "createdAt": "2026-05-14T11:37:34.215Z",
+      "pdfUrl": "/blogs/pdfs/e4451437-6226-44a9-90bc-65812b20155a.pdf"
+    }
+  ]
+}

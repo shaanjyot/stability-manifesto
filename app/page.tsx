@@ -1,15 +1,21 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 
-const NAV_SECTIONS = [
-  { id: 'hero', label: 'Home' },
-  { id: 'problem', label: 'The Problem' },
-  { id: 'paradigms', label: 'Why They Fail' },
-  { id: 'missing', label: 'Missing Layer' },
-  { id: 'manifesto', label: 'Why Manifesto' },
-  { id: 'gudiya', label: 'GUDIYA' },
-  { id: 'pdf', label: 'Read PDF' },
+type NavItem =
+  | { kind: 'scroll'; id: string; label: string }
+  | { kind: 'link'; label: string; href: string }
+
+const NAV_ITEMS: NavItem[] = [
+  { kind: 'scroll', id: 'hero', label: 'Home' },
+  { kind: 'scroll', id: 'problem', label: 'The Problem' },
+  { kind: 'scroll', id: 'paradigms', label: 'Why They Fail' },
+  { kind: 'scroll', id: 'missing', label: 'Missing Layer' },
+  { kind: 'scroll', id: 'manifesto', label: 'Why Manifesto' },
+  { kind: 'scroll', id: 'gudiya', label: 'GUDIYA' },
+  { kind: 'scroll', id: 'pdf', label: 'Read PDF' },
+  { kind: 'link', label: 'Blogs', href: '/blogs' },
 ]
 
 /** Five narrative beats — editorial through-line (replaces cramped “pillar” cards) */
@@ -195,19 +201,50 @@ export default function StabilityManifesto() {
             </span>
           </div>
           <div className="nav-links" style={{ display: 'flex', gap: 4 }}>
-            {NAV_SECTIONS.map((s) => (
-              <button key={s.id} onClick={() => scrollTo(s.id)} style={{
-                background: 'none', border: 'none', fontFamily: "'Rajdhani', sans-serif",
-                fontSize: 13, fontWeight: 600, letterSpacing: 1.5, cursor: 'pointer',
-                padding: '8px 14px', textTransform: 'uppercase', color: '#9090a8',
-                transition: 'color 0.2s',
-              }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#c0a060')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#9090a8')}
-              >
-                {s.label}
-              </button>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.kind === 'link' ? (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  style={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    letterSpacing: 1.5,
+                    padding: '8px 14px',
+                    textTransform: 'uppercase',
+                    color: '#9090a8',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s',
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => scrollTo(item.id)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    letterSpacing: 1.5,
+                    cursor: 'pointer',
+                    padding: '8px 14px',
+                    textTransform: 'uppercase',
+                    color: '#9090a8',
+                    transition: 'color 0.2s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#c0a060')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#9090a8')}
+                >
+                  {item.label}
+                </button>
+              )
+            )}
           </div>
           <button onClick={() => setNavOpen(!navOpen)} style={{ background: 'none', border: 'none', color: '#c0a060', fontSize: 22, cursor: 'pointer', padding: 8 }}>
             {navOpen ? '✕' : '☰'}
@@ -215,15 +252,51 @@ export default function StabilityManifesto() {
         </div>
         {navOpen && (
           <div style={{ background: 'rgba(6,6,10,0.98)', padding: '16px 24px 24px', display: 'flex', flexDirection: 'column', gap: 4, borderTop: '1px solid rgba(192,160,96,0.15)' }}>
-            {NAV_SECTIONS.map((s) => (
-              <button key={s.id} onClick={() => scrollTo(s.id)} style={{
-                background: 'none', border: 'none', color: '#e0e0f0', fontFamily: "'Rajdhani', sans-serif",
-                fontSize: 16, fontWeight: 600, padding: '10px 0', textAlign: 'left',
-                letterSpacing: 1, cursor: 'pointer', textTransform: 'uppercase',
-              }}>
-                {s.label}
-              </button>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.kind === 'link' ? (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setNavOpen(false)}
+                  style={{
+                    color: '#e0e0f0',
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: 16,
+                    fontWeight: 600,
+                    padding: '10px 0',
+                    letterSpacing: 1,
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    scrollTo(item.id)
+                    setNavOpen(false)
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#e0e0f0',
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: 16,
+                    fontWeight: 600,
+                    padding: '10px 0',
+                    textAlign: 'left',
+                    letterSpacing: 1,
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {item.label}
+                </button>
+              )
+            )}
           </div>
         )}
       </nav>
@@ -754,14 +827,52 @@ export default function StabilityManifesto() {
             <div className="footer-links" style={{ display: 'flex', gap: 60, flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ fontSize: 11, letterSpacing: 3, color: '#444', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>SECTIONS</div>
-                {NAV_SECTIONS.map(s => (
-                  <button key={s.id} onClick={() => scrollTo(s.id)} style={{ background: 'none', border: 'none', color: '#8888a0', fontFamily: "'Rajdhani', sans-serif", fontSize: 14, cursor: 'pointer', textAlign: 'left', letterSpacing: 0.5, padding: 0, transition: 'color 0.2s' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#c0a060')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#8888a0')}
-                  >
-                    {s.label}
-                  </button>
-                ))}
+                {NAV_ITEMS.map((item) =>
+                  item.kind === 'link' ? (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      style={{
+                        color: '#8888a0',
+                        fontFamily: "'Rajdhani', sans-serif",
+                        fontSize: 14,
+                        textAlign: 'left',
+                        letterSpacing: 0.5,
+                        padding: 0,
+                        textDecoration: 'none',
+                        transition: 'color 0.2s',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'block',
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => scrollTo(item.id)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#8888a0',
+                        fontFamily: "'Rajdhani', sans-serif",
+                        fontSize: 14,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        letterSpacing: 0.5,
+                        padding: 0,
+                        transition: 'color 0.2s',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#c0a060')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#8888a0')}
+                    >
+                      {item.label}
+                    </button>
+                  )
+                )}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ fontSize: 11, letterSpacing: 3, color: '#444', textTransform: 'uppercase', fontWeight: 700, marginBottom: 8 }}>CONTACT</div>

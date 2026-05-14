@@ -1,0 +1,87 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[3]!./app/globals.css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #060608;
+  color: #e0e0f0;
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+}
+
+[data-animate] {
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060608;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0a060;
+  border-radius: 3px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none !important;
+  }
+  .two-col {
+    flex-direction: column !important;
+  }
+  .beat-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px 0 !important;
+  }
+  .gudiya-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .velocity-wrap {
+    flex-direction: column !important;
+  }
+  .counters-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .nyquist-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .comparison-table-row,
+  .comparison-table-header {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .comparison-table-row > div:nth-child(3),
+  .comparison-table-header > div:nth-child(3) {
+    display: none;
+  }
+  .footer-top {
+    flex-direction: column !important;
+  }
+  .footer-links {
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+}
