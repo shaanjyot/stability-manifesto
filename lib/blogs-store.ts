@@ -11,6 +11,8 @@ export type BlogMeta = {
   title: string
   createdAt: string
   pdfUrl: string
+  /** Present when selected from DB; new rows default to 0 */
+  visitCount?: number
 }
 
 /** Match prior JSON shape for blog detail pages */
@@ -49,7 +51,7 @@ export async function listBlogsMeta(): Promise<BlogMeta[]> {
 
   const { data, error } = await supabase
     .from('blogs')
-    .select('id, slug, title, created_at, pdf_storage_path')
+    .select('id, slug, title, created_at, pdf_storage_path, visit_count')
     .order('created_at', { ascending: false })
 
   if (error || !data) return []
@@ -60,7 +62,19 @@ export async function listBlogsMeta(): Promise<BlogMeta[]> {
     title: row.title,
     createdAt: row.created_at,
     pdfUrl: publicBlogPdfUrl(row.pdf_storage_path),
+    visitCount: typeof row.visit_count === 'number' ? row.visit_count : 0,
   }))
+}
+
+export async function incrementBlogVisit(slug: string): Promise<void> {
+  if (!slug?.trim()) return
+  const supabase = createSupabaseServerClient()
+  if (!supabase) return
+
+  const { error } = await supabase.rpc('increment_blog_visit', { p_slug: slug.trim() })
+  if (error) {
+    console.warn('[blogs] increment_blog_visit:', error.message)
+  }
 }
 
 export async function getBlogBySlug(slug: string): Promise<BlogMeta | null> {
@@ -192,6 +206,7 @@ export async function createBlogFromPdf(opts: {
       summary: summaryDisplay,
       page_count: opts.pageCount ?? null,
       pdf_storage_path,
+      visit_count: 0,
     })
     .select('id, slug, title, created_at, pdf_storage_path')
     .single()

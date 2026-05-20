@@ -8,6 +8,7 @@ type BlogRow = {
   slug: string
   title: string
   createdAt: string
+  visitCount?: number
 }
 
 export default function AdminPage() {
@@ -395,6 +396,9 @@ export default function AdminPage() {
                         </div>
                         <div style={{ fontSize: 12, color: '#555', marginTop: 6, fontFamily: "'Share Tech Mono', monospace" }}>
                           /blogs/{b.slug}
+                        </div>
+                        <div style={{ fontSize: 12, color: '#6a6a78', marginTop: 8, fontWeight: 600 }}>
+                          Visits: {typeof b.visitCount === 'number' ? b.visitCount.toLocaleString() : '—'}
                         </div>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

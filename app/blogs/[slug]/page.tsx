@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getBlogBySlug, loadBlogContent } from '@/lib/blogs-store'
 import { BlogPdfViewer } from './BlogPdfViewer'
+import { BlogShareToolbar } from './BlogShareToolbar'
+import { BlogViewBeacon } from './BlogViewBeacon'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,6 +42,7 @@ export default async function BlogPostPage({ params }: Props) {
       }}
     >
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
+        <BlogViewBeacon slug={blog.slug} />
         <nav style={{ marginBottom: 40 }}>
           <Link
             href="/blogs"
@@ -72,11 +75,12 @@ export default async function BlogPostPage({ params }: Props) {
               fontWeight: 700,
               color: '#e8e8f8',
               lineHeight: 1.15,
-              marginBottom: 24,
+              marginBottom: 12,
             }}
           >
             {blog.title}
           </h1>
+          <BlogShareToolbar />
         </header>
 
         <section style={{ marginBottom: 32 }}>
