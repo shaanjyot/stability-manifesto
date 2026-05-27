@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { pdfEmbedUrl } from '@/lib/pdf-embed-url'
 
 type Props = {
   pdfUrl: string
@@ -25,7 +26,7 @@ export function BlogPdfViewer({ pdfUrl, pageCount: initialTotal }: Props) {
     setJump(String(page))
   }, [page])
 
-  const src = paged ? `${pdfUrl}#page=${page}` : pdfUrl
+  const src = pdfEmbedUrl(pdfUrl, paged ? page : undefined)
 
   const go = (p: number) => {
     const next = Math.max(1, Math.min(totalPages, Math.round(p)))
@@ -53,27 +54,16 @@ export function BlogPdfViewer({ pdfUrl, pageCount: initialTotal }: Props) {
             background: 'rgba(255,255,255,0.04)',
             borderBottom: '1px solid rgba(255,255,255,0.06)',
             padding: '12px 16px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
           }}
         >
           <span style={{ fontSize: 12, color: '#666', letterSpacing: 1, textTransform: 'uppercase' }}>
             PDF
           </span>
-          <a
-            href={pdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontSize: 12, color: '#7eb8d4', fontWeight: 600, textDecoration: 'none' }}
-          >
-            Open in new tab
-          </a>
         </div>
         <div style={{ position: 'relative', height: 'min(75vh, 900px)', minHeight: 480 }}>
           <iframe
             title="Blog PDF"
-            src={pdfUrl}
+            src={pdfEmbedUrl(pdfUrl)}
             style={{
               width: '100%',
               height: '100%',
@@ -189,20 +179,6 @@ export function BlogPdfViewer({ pdfUrl, pageCount: initialTotal }: Props) {
           >
             Next ›
           </button>
-          <a
-            href={pdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontSize: 12,
-              color: '#7eb8d4',
-              fontWeight: 600,
-              textDecoration: 'none',
-              marginLeft: 4,
-            }}
-          >
-            Open in new tab
-          </a>
         </div>
       </div>
       <div style={{ position: 'relative', height: 'min(75vh, 900px)', minHeight: 480 }}>

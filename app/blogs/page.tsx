@@ -7,36 +7,12 @@ export default async function BlogsIndexPage() {
   const blogs = await listBlogsMeta()
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: '#060608',
-        fontFamily: "'Rajdhani', sans-serif",
-        color: '#e0e0f0',
-        padding: '96px 24px 80px',
-      }}
-    >
+    <div style={{ color: '#e0e0f0', padding: '48px 24px 80px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
-        <nav style={{ marginBottom: 48 }}>
-          <Link
-            href="/"
-            style={{
-              fontSize: 13,
-              letterSpacing: 2,
-              textTransform: 'uppercase',
-              color: '#c0a060',
-              textDecoration: 'none',
-              fontWeight: 600,
-            }}
-          >
-            ← Back to manifesto
-          </Link>
-        </nav>
-
         <header style={{ marginBottom: 56 }}>
           <div
             style={{
-              fontSize: 11,
+              fontSize: 14,
               letterSpacing: 4,
               color: '#c0a060',
               textTransform: 'uppercase',
@@ -59,7 +35,7 @@ export default async function BlogsIndexPage() {
             <span style={{ color: '#c0a060' }}>Blogs</span> &amp; briefs
           </h1>
           <p style={{ fontSize: 17, color: '#707088', maxWidth: 560, lineHeight: 1.7 }}>
-            Each entry includes a short extracted summary and an embedded PDF viewer. Open the file in a new tab anytime.
+            Each entry includes a short extracted summary and an embedded PDF viewer.
           </p>
         </header>
 

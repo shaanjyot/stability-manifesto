@@ -172,7 +172,7 @@ export default function AdminPage() {
 
   const labelStyle: React.CSSProperties = {
     display: 'block',
-    fontSize: 12,
+    fontSize: 15,
     letterSpacing: 2,
     textTransform: 'uppercase',
     color: '#888',
@@ -193,12 +193,12 @@ export default function AdminPage() {
         <nav style={{ marginBottom: 32 }}>
           <Link
             href="/blogs"
-            style={{ fontSize: 13, letterSpacing: 2, color: '#c0a060', textDecoration: 'none', fontWeight: 600 }}
+            style={{ fontSize: 16, letterSpacing: 2, color: '#c0a060', textDecoration: 'none', fontWeight: 600 }}
           >
             ← Blogs
           </Link>
           <span style={{ color: '#333', margin: '0 12px' }}>|</span>
-          <Link href="/" style={{ fontSize: 13, letterSpacing: 2, color: '#555', textDecoration: 'none' }}>
+          <Link href="/" style={{ fontSize: 16, letterSpacing: 2, color: '#555', textDecoration: 'none' }}>
             Home
           </Link>
         </nav>
@@ -316,7 +316,7 @@ export default function AdminPage() {
                   padding: '8px 16px',
                   borderRadius: 6,
                   cursor: 'pointer',
-                  fontSize: 13,
+                  fontSize: 16,
                 }}
               >
                 Sign out
@@ -394,17 +394,17 @@ export default function AdminPage() {
                         <div style={{ fontFamily: "'Cinzel', serif", fontSize: 16, color: '#e8e8f8', fontWeight: 600 }}>
                           {b.title}
                         </div>
-                        <div style={{ fontSize: 12, color: '#555', marginTop: 6, fontFamily: "'Share Tech Mono', monospace" }}>
+                        <div style={{ fontSize: 15, color: '#555', marginTop: 6, fontFamily: "'Share Tech Mono', monospace" }}>
                           /blogs/{b.slug}
                         </div>
-                        <div style={{ fontSize: 12, color: '#6a6a78', marginTop: 8, fontWeight: 600 }}>
+                        <div style={{ fontSize: 15, color: '#6a6a78', marginTop: 8, fontWeight: 600 }}>
                           Visits: {typeof b.visitCount === 'number' ? b.visitCount.toLocaleString() : '—'}
                         </div>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <Link
                           href={`/blogs/${b.slug}`}
-                          style={{ fontSize: 13, color: '#7eb8d4', textDecoration: 'none', fontWeight: 600 }}
+                          style={{ fontSize: 16, color: '#7eb8d4', textDecoration: 'none', fontWeight: 600 }}
                         >
                           View
                         </Link>
@@ -418,7 +418,7 @@ export default function AdminPage() {
                             color: '#e07070',
                             padding: '8px 14px',
                             borderRadius: 6,
-                            fontSize: 13,
+                            fontSize: 16,
                             fontWeight: 600,
                             cursor: busy ? 'wait' : 'pointer',
                             fontFamily: "'Rajdhani', sans-serif",

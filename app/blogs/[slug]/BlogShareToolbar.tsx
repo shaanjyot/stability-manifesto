@@ -67,7 +67,7 @@ export function BlogShareToolbar() {
     >
       <span
         style={{
-          fontSize: 11,
+          fontSize: 14,
           letterSpacing: 2,
           textTransform: 'uppercase',
           color: '#666',

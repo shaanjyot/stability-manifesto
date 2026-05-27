@@ -23,7 +23,10 @@ export type BlogContentFile = {
 
 export function publicBlogPdfUrl(storagePath: string): string {
   const base = (getSupabaseUrl() ?? '').replace(/\/$/, '')
-  return `${base}/storage/v1/object/public/${BUCKET}/${storagePath}`
+  if (base) {
+    return `${base}/storage/v1/object/public/${BUCKET}/${storagePath}`
+  }
+  return `/blogs/pdfs/${storagePath}`
 }
 
 export function slugify(input: string): string {

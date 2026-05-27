@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getBlogBySlug, loadBlogContent } from '@/lib/blogs-store'
 import { BlogPdfViewer } from './BlogPdfViewer'
@@ -32,32 +31,9 @@ export default async function BlogPostPage({ params }: Props) {
     'Read the full document in the PDF viewer below.'
 
   return (
-    <article
-      style={{
-        minHeight: '100vh',
-        background: '#060608',
-        fontFamily: "'Rajdhani', sans-serif",
-        color: '#c8c8d8',
-        padding: '96px 24px 100px',
-      }}
-    >
+    <article style={{ color: '#c8c8d8', padding: '48px 24px 80px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
         <BlogViewBeacon slug={blog.slug} />
-        <nav style={{ marginBottom: 40 }}>
-          <Link
-            href="/blogs"
-            style={{
-              fontSize: 13,
-              letterSpacing: 2,
-              textTransform: 'uppercase',
-              color: '#c0a060',
-              textDecoration: 'none',
-              fontWeight: 600,
-            }}
-          >
-            ← All blogs
-          </Link>
-        </nav>
 
         <header style={{ marginBottom: 36, borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: 28 }}>
           <div style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: 13, color: '#555', marginBottom: 12 }}>
@@ -86,7 +62,7 @@ export default async function BlogPostPage({ params }: Props) {
         <section style={{ marginBottom: 32 }}>
           <div
             style={{
-              fontSize: 11,
+              fontSize: 14,
               letterSpacing: 3,
               color: '#c0a060',
               textTransform: 'uppercase',
@@ -111,7 +87,7 @@ export default async function BlogPostPage({ params }: Props) {
         <section style={{ marginBottom: 48 }}>
           <div
             style={{
-              fontSize: 11,
+              fontSize: 14,
               letterSpacing: 3,
               color: '#c0a060',
               textTransform: 'uppercase',
@@ -123,12 +99,6 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
           <BlogPdfViewer pdfUrl={blog.pdfUrl} pageCount={content?.pageCount} />
         </section>
-
-        <footer style={{ paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <Link href="/" style={{ fontSize: 14, color: '#666', textDecoration: 'none' }}>
-            Stability Manifesto home
-          </Link>
-        </footer>
       </div>
     </article>
   )
